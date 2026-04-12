@@ -18,10 +18,10 @@
 
         <TextView
             android:id="@+id/naslov"
-            android:textSize="18sp"
-            android:text="Film"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="Film"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/zanr"
@@ -31,10 +31,10 @@
 
         <RatingBar
             android:id="@+id/ratingBar"
-            android:numStars="5"
-            android:stepSize="0.5"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="47dp"
+            android:numStars="5"
+            android:stepSize="0.5" />
 
     </LinearLayout>
 

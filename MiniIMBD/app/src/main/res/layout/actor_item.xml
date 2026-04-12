@@ -6,8 +6,8 @@
 
     <ImageView
         android:id="@+id/actor_slika"
-        android:layout_width="80dp"
-        android:layout_height="80dp"/>
+        android:layout_width="158dp"
+        android:layout_height="184dp" />
 
     <TextView
         android:id="@+id/actor_ime"

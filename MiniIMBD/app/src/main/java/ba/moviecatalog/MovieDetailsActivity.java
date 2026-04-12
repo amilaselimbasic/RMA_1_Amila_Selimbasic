@@ -3,40 +3,47 @@ package ba.moviecatalog;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.RatingBar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-public class DetailActivity extends AppCompatActivity {
+public class MovieDetailsActivity extends AppCompatActivity {
 
+    // elementi iz XML-a
     ImageView poster;
-    TextView title, genre, description, rating;
-    RecyclerView actorsRecycler;
+    TextView title, genre, description;
+    RatingBar ratingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
 
+        // povezujem sa XML fajlom (mora se zvati activity_detail.xml u res/layout)
+        setContentView(R.layout.activity_movie_details);
+
+        // povezujem varijable sa elementima iz XML-a
         poster = findViewById(R.id.detailPoster);
         title = findViewById(R.id.detailTitle);
         genre = findViewById(R.id.detailGenre);
         description = findViewById(R.id.detailDescription);
-        rating = findViewById(R.id.detailRating);
-        actorsRecycler = findViewById(R.id.recyclerActors);
+        ratingBar = findViewById(R.id.detailRating);
 
-        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
+        // dobijam podatke iz Intenta
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            // uzimam podatke koje sam poslala iz druge aktivnosti
+            int posterRes = extras.getInt("poster");
+            String movieTitle = extras.getString("title");
+            String movieGenre = extras.getString("genre");
+            String movieDesc = extras.getString("description");
+            float movieRating = extras.getFloat("rating");
 
-        poster.setImageResource(movie.poster);
-        title.setText(movie.naslov);
-        genre.setText(movie.zanr);
-        description.setText(movie.opis);
-        rating.setText("Rating: " + movie.rating);
-
-        ActorAdapter actorAdapter = new ActorAdapter(this, movie.glumci);
-
-        actorsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        actorsRecycler.setAdapter(actorAdapter);
+            // postavljam podatke u elemente
+            poster.setImageResource(posterRes);
+            title.setText(movieTitle);
+            genre.setText(movieGenre);
+            description.setText(movieDesc);
+            ratingBar.setRating(movieRating);
+        }
     }
 }

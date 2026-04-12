@@ -22,17 +22,18 @@ public class FavoritesActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // filtriramo samo favorite
+        // pravim novu listu samo za favorite
         ArrayList<Movie> favorites = new ArrayList<>();
 
-        for(Movie m : MainActivity.movieList){
-
-            if(m.favorit){
-                favorites.add(m);
+        // prolazim kroz glavnu listu iz MainActivity
+        // sad radi jer je movieList static
+        for (Movie m : MainActivity.movieList) {
+            if (m.favorit) {
+                favorites.add(m); // dodajem samo one koji su favorit
             }
-
         }
 
+        // prikazujem favorite u recycleru
         recyclerView.setAdapter(new MovieAdapter(this, favorites));
     }
 }
