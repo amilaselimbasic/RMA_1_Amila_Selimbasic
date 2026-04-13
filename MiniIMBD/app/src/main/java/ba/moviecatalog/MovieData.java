@@ -3,116 +3,63 @@ package ba.moviecatalog;
 import java.util.ArrayList;
 import java.util.List;
 
-// ova klasa sluzi samo da generise listu filmova
-
 public class MovieData {
+
+    private static List<Movie> movies;
 
     public static List<Movie> getMovies() {
 
-        List<Movie> lista = new ArrayList<>();
+        if (movies == null) {
 
-        // ======================
-        // WHAT HAPPENED TO MONDAY
-        // ======================
+            movies = new ArrayList<>();
 
-        List<Actor> actors1 = new ArrayList<>();
-        actors1.add(new Actor("Noomi Rapace", R.drawable.noomi));
-        actors1.add(new Actor("Willem Dafoe", R.drawable.dafoe));
-        actors1.add(new Actor("Glenn Close", R.drawable.close));
-        actors1.add(new Actor("Marwan Kenzari", R.drawable.kenzari));
-        actors1.add(new Actor("Christian Rubeck", R.drawable.rubeck));
+            Actor[] titanicActors = {
+                    new Actor(R.drawable.dicaprio, "Leonardo DiCaprio"),
+                    new Actor(R.drawable.winslet, "Kate Winslet"),
+                    new Actor(R.drawable.zane, "Billy Zane"),
+                    new Actor(R.drawable.bates, "Kathy Bates"),
+                    new Actor(R.drawable.frances, "Frances Fisher")
+            };
 
-        lista.add(new Movie(
-                "What Happened to Monday",
-                "Sci-Fi",
-                "U svijetu gdje je dozvoljeno samo jedno dijete po porodici, sedam sestara se krije od vlade.",
-                R.drawable.monday,
-                7.6f,
-                actors1
-        ));
+            Actor[] nowYouSeeMeActors = {
+                    new Actor(R.drawable.franco, "Dave Franco"),
+                    new Actor(R.drawable.harrelson, "Woody Harrelson"),
+                    new Actor(R.drawable.fisher, "Isla Fisher"),
+                    new Actor(R.drawable.close, "Glenn Close"),
+                    new Actor(R.drawable.rubeck, "Elias Rubeck")
+            };
 
-        // ======================
-        // SHUTTER ISLAND
-        // ======================
+            Actor[] shutterActors = {
+                    new Actor(R.drawable.dicaprio, "Leonardo DiCaprio"),
+                    new Actor(R.drawable.rubeck, "Elias Rubeck"),
+                    new Actor(R.drawable.williams, "Michelle Williams"),
+                    new Actor(R.drawable.rodriguez, "Michelle Rodriguez"),
+                    new Actor(R.drawable.brewster, "Jordana Brewster")
+            };
 
-        List<Actor> actors2 = new ArrayList<>();
-        actors2.add(new Actor("Leonardo DiCaprio", R.drawable.dicaprio));
-        actors2.add(new Actor("Mark Ruffalo", R.drawable.ruffalo));
-        actors2.add(new Actor("Ben Kingsley", R.drawable.kingsley));
-        actors2.add(new Actor("Michelle Williams", R.drawable.williams));
-        actors2.add(new Actor("Max von Sydow", R.drawable.sydow));
+            Actor[] fastActors = {
+                    new Actor(R.drawable.walker, "Paul Walker"),
+                    new Actor(R.drawable.rodriguez, "Michelle Rodriguez"),
+                    new Actor(R.drawable.tyrese, "Tyrese Gibson"),
+                    new Actor(R.drawable.brewster, "Jordana Brewster"),
+                    new Actor(R.drawable.williams, "Michelle Williams")
+            };
 
-        lista.add(new Movie(
-                "Shutter Island",
-                "Thriller",
-                "US marshal istrazuje nestanak pacijentice iz mentalne bolnice na izoliranom ostrvu.",
-                R.drawable.shutter,
-                8.2f,
-                actors2
-        ));
+            Actor[] mondayActors = {
+                    new Actor(R.drawable.noomi, "Noomi Rapace"),
+                    new Actor(R.drawable.dafoe, "Willem Dafoe"),
+                    new Actor(R.drawable.rubeck, "Elias Rubeck"),
+                    new Actor(R.drawable.zane, "Billy Zane"),
+                    new Actor(R.drawable.franco, "James Franco")
+            };
 
-        // ======================
-        // NOW YOU SEE ME
-        // ======================
+            movies.add(new Movie(R.drawable.titanic, "Titanic", "Drama/Romansa", "Kultni film o ljubavi na Titanicu.", 4.5f, titanicActors));
+            movies.add(new Movie(R.drawable.nowyou, "Now You See Me", "Krimi/Triler", "Magija i pljačke u modernom svijetu.", 4.3f, nowYouSeeMeActors));
+            movies.add(new Movie(R.drawable.shutter, "Shutter Island", "Thriller", "Misterija na udaljenom ostrvu.", 4.2f, shutterActors));
+            movies.add(new Movie(R.drawable.fast, "Fast & Furious", "Akcija", "Brza vožnja i adrenalinske scene.", 4.0f, fastActors));
+            movies.add(new Movie(R.drawable.monday, "Monday", "Drama", "Priča o ljubavi i životu.", 3.5f, mondayActors));
+        }
 
-        List<Actor> actors3 = new ArrayList<>();
-        actors3.add(new Actor("Jesse Eisenberg", R.drawable.eisenberg));
-        actors3.add(new Actor("Woody Harrelson", R.drawable.harrelson));
-        actors3.add(new Actor("Isla Fisher", R.drawable.fisher));
-        actors3.add(new Actor("Dave Franco", R.drawable.franco));
-        actors3.add(new Actor("Mark Ruffalo", R.drawable.ruffalo));
-
-        lista.add(new Movie(
-                "Now You See Me",
-                "Crime",
-                "Grupa iluzionista pljacka banke tokom svojih nastupa.",
-                R.drawable.nowyou,
-                7.3f,
-                actors3
-        ));
-
-        // ======================
-        // TITANIC
-        // ======================
-
-        List<Actor> actors4 = new ArrayList<>();
-        actors4.add(new Actor("Leonardo DiCaprio", R.drawable.dicaprio));
-        actors4.add(new Actor("Kate Winslet", R.drawable.winslet));
-        actors4.add(new Actor("Billy Zane", R.drawable.zane));
-        actors4.add(new Actor("Kathy Bates", R.drawable.bates));
-        actors4.add(new Actor("Frances Fisher", R.drawable.frances));
-
-        lista.add(new Movie(
-                "Titanic",
-                "Romance",
-                "Ljubavna prica dvoje mladih na cuvenom brodu Titanic.",
-                R.drawable.titanic,
-                7.9f,
-                actors4
-        ));
-
-        // ======================
-        // FAST AND FURIOUS
-        // ======================
-
-        List<Actor> actors5 = new ArrayList<>();
-        actors5.add(new Actor("Vin Diesel", R.drawable.diesel));
-        actors5.add(new Actor("Paul Walker", R.drawable.walker));
-        actors5.add(new Actor("Michelle Rodriguez", R.drawable.rodriguez));
-        actors5.add(new Actor("Jordana Brewster", R.drawable.brewster));
-        actors5.add(new Actor("Tyrese Gibson", R.drawable.tyrese));
-
-        lista.add(new Movie(
-                "Fast and Furious",
-                "Action",
-                "Film o ilegalnim ulicnim utrkama i kriminalu.",
-                R.drawable.fast,
-                7.0f,
-                actors5
-        ));
-
-        return lista;
-
+        return movies;
     }
-
 }

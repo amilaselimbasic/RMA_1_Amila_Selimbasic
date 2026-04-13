@@ -7,33 +7,26 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ikona"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ikona"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MiniIMBD">
+        android:theme="@style/Theme.MovieCatalog">
 
-        <!-- Glavna aktivnost  -->
+        <!-- Glavna aktivnost mora imati exported="true" -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Ostale aktivnosti -->
-        <activity
-            android:name=".ActorsActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".FavoritesActivity"
-            android:exported="false"/>
-        <activity
-            android:name=".MovieDetailsActivity"
-            android:exported="false"/>
+        <!-- Ostale aktivnosti nemaju intent-filter, pa exported nije obavezno -->
+        <activity android:name=".MovieDetailsActivity" />
+        <activity android:name=".ActorsActivity" />
+        <activity android:name=".FavoritesActivity" />
 
     </application>
-
 </manifest>

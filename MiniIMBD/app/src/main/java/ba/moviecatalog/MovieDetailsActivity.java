@@ -1,75 +1,93 @@
 package ba.moviecatalog;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.RatingBar;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import android.content.Intent;
 
-// Aktivnost koja prikazuje detalje o filmu
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Arrays;
+
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    ImageView poster;
-    TextView title, genre, description;
-    RatingBar ratingBar;
-    Button btnFavorite;
-    RecyclerView recyclerActors;
-    ActorAdapter actorAdapter;
-    Movie movie;
+    private ImageView moviePoster;
+    private TextView movieTitle;
+    private TextView movieGenre;
+    private TextView movieDescription;
+    private RatingBar movieRatingBar;
+    private Button favoriteButton;
+    private RecyclerView recyclerActors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
 
-        poster = findViewById(R.id.poster);
-        title = findViewById(R.id.title);
-        genre = findViewById(R.id.genre);
-        description = findViewById(R.id.description);
-        ratingBar = findViewById(R.id.ratingBar);
-        btnFavorite = findViewById(R.id.btnFavorite);
-        recyclerActors = findViewById(R.id.recyclerActorsDetails);
+        moviePoster = findViewById(R.id.moviePoster);
+        movieTitle = findViewById(R.id.movieTitle);
+        movieGenre = findViewById(R.id.movieGenre);
+        movieDescription = findViewById(R.id.movieDescription);
+        movieRatingBar = findViewById(R.id.movieRatingBar);
+        favoriteButton = findViewById(R.id.favoriteButton);
+        recyclerActors = findViewById(R.id.recyclerActorsInMovie);
 
-        // Dohvati indeks filma iz Intenta
-        int index = getIntent().getIntExtra("movie_index", -1);
-        movie = MainActivity.movieList.get(index); // radimo na originalnom objektu
+        Movie movie = (Movie) getIntent().getSerializableExtra("movie");
 
-        // Popuni podatke
-        poster.setImageResource(movie.poster);
-        title.setText(movie.naslov);
-        genre.setText(movie.zanr);
-        description.setText(movie.opis);
-        ratingBar.setRating(movie.rating);
+        if (movie != null) {
 
-        // Lista glumaca
-        recyclerActors.setLayoutManager(new LinearLayoutManager(this));
-        actorAdapter = new ActorAdapter(movie.glumci);
-        recyclerActors.setAdapter(actorAdapter);
+            moviePoster.setImageResource(movie.getImageResId());
+            movieTitle.setText(movie.getTitle());
+            movieGenre.setText(movie.getGenre());
+            movieDescription.setText(movie.getDescription());
+            movieRatingBar.setRating(movie.getRating());
 
-        // Klik na dugme dodaje film u favorite
-        btnFavorite.setOnClickListener(v -> {
-            movie.favorit = true; // označi originalni objekt
-            btnFavorite.setText("U favoritima");
-        });
+            ActorAdapterAll actorAdapter =
+                    new ActorAdapterAll(this, Arrays.asList(movie.getActors()));
 
-        // Navigacija na dnu
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+            recyclerActors.setLayoutManager(new LinearLayoutManager(this));
+            recyclerActors.setAdapter(actorAdapter);
+
+            favoriteButton.setOnClickListener(v -> {
+
+                movie.setFavorit(true);
+
+                Toast.makeText(
+                        MovieDetailsActivity.this,
+                        movie.getTitle() + " added to favorites!",
+                        Toast.LENGTH_SHORT
+                ).show();
+            });
+        }
+
+        BottomNavigationView bottomNavigationView =
+                findViewById(R.id.bottom_navigation);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
+
             if (item.getItemId() == R.id.nav_movies) {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
-            } else if (item.getItemId() == R.id.nav_actors) {
+            }
+
+            if (item.getItemId() == R.id.nav_actors) {
                 startActivity(new Intent(this, ActorsActivity.class));
                 return true;
-            } else if (item.getItemId() == R.id.nav_favorites) {
+            }
+
+            if (item.getItemId() == R.id.nav_favorites) {
                 startActivity(new Intent(this, FavoritesActivity.class));
                 return true;
             }
+
             return false;
         });
     }

@@ -12,15 +12,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-// Adapter za prikaz glumaca u RecyclerView-u
-// Povezuje listu Actor objekata sa XML layoutom (actor_item.xml)
-public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder> {
+// Adapter za prikaz svih glumaca u RecyclerView-u
+public class ActorAdapterAll extends RecyclerView.Adapter<ActorAdapterAll.ActorViewHolder> {
 
     private Context context;
-    private List<Actor> actorList; // lista glumaca
+    private List<Actor> actorList;
 
     // Konstruktor – prima kontekst i listu glumaca
-    public ActorAdapter(Context context, List<Actor> actorList) {
+    public ActorAdapterAll(Context context, List<Actor> actorList) {
         this.context = context;
         this.actorList = actorList;
     }
@@ -28,36 +27,35 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
     @NonNull
     @Override
     public ActorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Povezuje XML layout (actor_item.xml) sa ViewHolder-om
+        // Inflater kreira izgled jednog item-a iz XML-a (actor_item.xml)
         View view = LayoutInflater.from(context).inflate(R.layout.actor_item, parent, false);
         return new ActorViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ActorViewHolder holder, int position) {
-        // Uzima glumca sa određene pozicije u listi
+        // Dohvati glumca na datoj poziciji
         Actor actor = actorList.get(position);
 
-        // Postavlja podatke u UI elemente
-        holder.actorImage.setImageResource(actor.getImage()); // slika glumca
-        holder.actorName.setText(actor.getName());            // ime glumca
+        // Postavi sliku i ime glumca
+        holder.actorImage.setImageResource(actor.getImage());
+        holder.actorName.setText(actor.getName());
     }
 
     @Override
     public int getItemCount() {
-        // Vraća broj glumaca u listi
         return actorList.size();
     }
 
-    // ViewHolder klasa – čuva reference na UI elemente iz actor_item.xml
+    // ViewHolder klasa – drži reference na elemente unutar jednog item-a
     public static class ActorViewHolder extends RecyclerView.ViewHolder {
         ImageView actorImage;
         TextView actorName;
 
         public ActorViewHolder(@NonNull View itemView) {
             super(itemView);
-            actorImage = itemView.findViewById(R.id.actorImage); // povezuje ImageView
-            actorName = itemView.findViewById(R.id.actorName);   // povezuje TextView
+            actorImage = itemView.findViewById(R.id.actorImage);
+            actorName = itemView.findViewById(R.id.actorName);
         }
     }
 }

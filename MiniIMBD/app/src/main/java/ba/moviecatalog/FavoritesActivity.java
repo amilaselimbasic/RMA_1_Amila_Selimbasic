@@ -1,21 +1,22 @@
 package ba.moviecatalog;
 
+import android.content.Intent;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import android.content.Intent;
-import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-// Aktivnost koja prikazuje sve filmove označene kao favoriti
 public class FavoritesActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    MovieAdapter adapter;
-    List<Movie> favoriteList;
+    private RecyclerView recyclerView;
+    private MovieAdapter movieAdapter;
+    private List<Movie> favorites;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,36 +26,44 @@ public class FavoritesActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerFavorites);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        favoriteList = new ArrayList<>();
-        adapter = new MovieAdapter(this, favoriteList);
-        recyclerView.setAdapter(adapter);
+        favorites = new ArrayList<>();
 
-        // Navigacija na dnu
+        movieAdapter = new MovieAdapter(this, favorites);
+        recyclerView.setAdapter(movieAdapter);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.nav_favorites);
+
         bottomNavigationView.setOnItemSelectedListener(item -> {
+
             if (item.getItemId() == R.id.nav_movies) {
                 startActivity(new Intent(this, MainActivity.class));
+                finish();
                 return true;
-            } else if (item.getItemId() == R.id.nav_actors) {
-                startActivity(new Intent(this, ActorsActivity.class));
-                return true;
-            } else if (item.getItemId() == R.id.nav_favorites) {
-                return true; // već smo ovdje
             }
-            return false;
+
+            if (item.getItemId() == R.id.nav_actors) {
+                startActivity(new Intent(this, ActorsActivity.class));
+                finish();
+                return true;
+            }
+
+            return item.getItemId() == R.id.nav_favorites;
         });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Osvježi listu favorita svaki put kad se vratiš
-        favoriteList.clear();
-        for (Movie movie : MainActivity.movieList) {
-            if (movie.favorit) {
-                favoriteList.add(movie); // dodaj sve označene filmove
+
+        favorites.clear();
+
+        for (Movie movie : MovieData.getMovies()) {
+            if (movie.isFavorit()) {
+                favorites.add(movie);
             }
         }
-        adapter.notifyDataSetChanged();
+
+        movieAdapter.notifyDataSetChanged();
     }
 }

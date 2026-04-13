@@ -1,27 +1,34 @@
 package ba.moviecatalog;
 
 import java.io.Serializable;
-import java.util.List;
 
 // Klasa koja predstavlja jedan film
-// Serializable omogućava da se objekat prenosi kroz Intent
-public class Movie implements Serializable {
-    String naslov;      // Naslov filma
-    String zanr;        // Žanr filma
-    String opis;        // Kratki opis filma
-    int poster;         // ID resursa za poster slike
-    float rating;       // Ocjena filma
-    List<Actor> glumci; // Lista glumaca koji glume u filmu
-    boolean favorit;    // Da li je film označen kao favorit
+public class Movie implements Serializable {   // ➝ dodali implements Serializable
+    private int imageResId;
+    private String title;
+    private String genre;
+    private String description;
+    private float rating;
+    private Actor[] actors;
+    private boolean favorit;
 
-    // Konstruktor za kreiranje novog filma
-    public Movie(String naslov, String zanr, String opis, int poster, float rating, List<Actor> glumci) {
-        this.naslov = naslov;
-        this.zanr = zanr;
-        this.opis = opis;
-        this.poster = poster;
+    public Movie(int imageResId, String title, String genre, String description, float rating, Actor[] actors) {
+        this.imageResId = imageResId;
+        this.title = title;
+        this.genre = genre;
+        this.description = description;
         this.rating = rating;
-        this.glumci = glumci;
-        this.favorit = false; // Po defaultu film nije favorit
+        this.actors = actors;
+        this.favorit = false;
     }
+
+    public int getImageResId() { return imageResId; }
+    public String getTitle() { return title; }
+    public String getGenre() { return genre; }
+    public String getDescription() { return description; }
+    public float getRating() { return rating; }
+    public Actor[] getActors() { return actors; }
+
+    public boolean isFavorit() { return favorit; }
+    public void setFavorit(boolean favorit) { this.favorit = favorit; }
 }

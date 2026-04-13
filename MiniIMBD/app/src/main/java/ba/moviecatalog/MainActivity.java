@@ -9,14 +9,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import android.content.Intent;
 import java.util.List;
 
-// Glavna aktivnost – prikazuje sve filmove
+// Glavni ekran aplikacije – prikazuje listu filmova
 public class MainActivity extends AppCompatActivity {
 
-    public static List<Movie> movieList; // globalna lista filmova
-    RecyclerView recyclerView;
-    MovieAdapter adapter;
-    SearchView searchView;
-    BottomNavigationView bottomNavigationView;
+    // Globalna lista filmova – koristi se u svim aktivnostima
+    public static List<Movie> movieList;
+
+    private RecyclerView recyclerView;
+    private MovieAdapter adapter;
+    private SearchView searchView;
+    private BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         searchView = findViewById(R.id.searchMovies);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // Kreiraj listu samo jednom – da se ne resetuje kad se otvori nova aktivnost
+        // Inicijaliziraj listu filmova samo jednom
         if (movieList == null) {
             movieList = MovieData.getMovies();
         }
@@ -36,13 +38,14 @@ public class MainActivity extends AppCompatActivity {
         adapter = new MovieAdapter(this, movieList);
         recyclerView.setAdapter(adapter);
 
-        // Pretraga
+        // Pretraga filmova
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 adapter.getFilter().filter(query);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
@@ -50,10 +53,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Navigacija
+        // Navigacija – ista logika kao u ostalim aktivnostima
         bottomNavigationView.setOnItemSelectedListener(item -> {
             if (item.getItemId() == R.id.nav_movies) {
-                return true;
+                return true; // već smo na ekranu filmova
             } else if (item.getItemId() == R.id.nav_actors) {
                 startActivity(new Intent(this, ActorsActivity.class));
                 return true;

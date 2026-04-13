@@ -3,12 +3,15 @@ package ba.moviecatalog;
 import java.io.Serializable;
 
 // Klasa koja predstavlja jednog glumca
-public class Actor implements Serializable {
-    String ime;   // Ime glumca
-    int slika;    // ID resursa za sliku glumca
+public class Actor implements Serializable {   // ➝ dodali implements Serializable
+    private int image;
+    private String name;
 
-    public Actor(String ime, int slika) {
-        this.ime = ime;
-        this.slika = slika;
+    public Actor(int image, String name) {
+        this.image = image;
+        this.name = name;
     }
+
+    public int getImage() { return image; }
+    public String getName() { return name; }
 }
