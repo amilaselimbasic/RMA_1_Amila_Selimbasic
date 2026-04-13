@@ -1,18 +1,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="8dp"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/actor_slika"
-        android:layout_width="158dp"
-        android:layout_height="184dp" />
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:scaleType="centerCrop"/>
 
     <TextView
         android:id="@+id/actor_ime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ime"/>
-
+        android:paddingStart="8dp"
+        android:textSize="16sp"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>

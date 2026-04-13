@@ -1,78 +1,67 @@
 package ba.moviecatalog;
 
+import android.os.Bundle;
+import android.widget.SearchView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.widget.SearchView;
-
-import java.util.ArrayList;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.content.Intent;
 import java.util.List;
 
-// Glavna aktivnost aplikacije
-// prikazuje listu svih filmova
+// Glavna aktivnost – prikazuje sve filmove
 public class MainActivity extends AppCompatActivity {
 
+    public static List<Movie> movieList; // globalna lista filmova
     RecyclerView recyclerView;
     MovieAdapter adapter;
-
-    // Ovdje sam stavio static da bi se moglo koristiti iz druge aktivnosti
-    // znam da to nije najbolje rješenje, ali radi posao za sad :)
-    public static List<Movie> movieList;
-
-    List<Movie> filteredList;
-
     SearchView searchView;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // povezivanje layout elemenata
         recyclerView = findViewById(R.id.recyclerMovies);
         searchView = findViewById(R.id.searchMovies);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
 
-        // dohvatanje liste filmova
-        movieList = MovieData.getMovies();
+        // Kreiraj listu samo jednom – da se ne resetuje kad se otvori nova aktivnost
+        if (movieList == null) {
+            movieList = MovieData.getMovies();
+        }
 
-        // pravim kopiju liste da mogu filtrirati
-        filteredList = new ArrayList<>(movieList);
-
-        // recycler view layout
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        adapter = new MovieAdapter(this, filteredList);
+        adapter = new MovieAdapter(this, movieList);
         recyclerView.setAdapter(adapter);
 
-        // SEARCH funkcija
+        // Pretraga
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false; // ne koristim submit
+                adapter.getFilter().filter(query);
+                return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
-
-                // brišem staru listu
-                filteredList.clear();
-
-                // prolazim kroz sve filmove
-                for (Movie m : movieList) {
-                    // ako naslov sadrži tekst koji sam upisao
-                    if (m.naslov.toLowerCase().contains(newText.toLowerCase())) {
-                        filteredList.add(m); // dodaj ga u filtriranu listu
-                    }
-                }
-
-                // kažem adapteru da se podaci promijenili
-                adapter.notifyDataSetChanged();
-                return true;
+                adapter.getFilter().filter(newText);
+                return false;
             }
         });
 
+        // Navigacija
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.nav_movies) {
+                return true;
+            } else if (item.getItemId() == R.id.nav_actors) {
+                startActivity(new Intent(this, ActorsActivity.class));
+                return true;
+            } else if (item.getItemId() == R.id.nav_favorites) {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
+            }
+            return false;
+        });
     }
 }

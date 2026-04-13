@@ -10,23 +10,28 @@ import android.os.Bundle;
 import java.util.ArrayList;
 import java.util.List;
 
-// Aktivnost koja prikazuje sve filmove označene kao favoriti
-public class FavoritesActivity extends AppCompatActivity {
+// Aktivnost koja prikazuje glumce
+public class ActorsActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    MovieAdapter adapter;
-    List<Movie> favoriteList;
+    ActorAdapter adapter;
+    List<Actor> actorList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_favorites);
+        setContentView(R.layout.activity_actors);
 
-        recyclerView = findViewById(R.id.recyclerFavorites);
+        recyclerView = findViewById(R.id.recyclerActors);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        favoriteList = new ArrayList<>();
-        adapter = new MovieAdapter(this, favoriteList);
+        // Napuni listu glumaca iz svih filmova
+        actorList = new ArrayList<>();
+        for (Movie movie : MainActivity.movieList) {
+            actorList.addAll(movie.glumci);
+        }
+
+        adapter = new ActorAdapter(actorList);
         recyclerView.setAdapter(adapter);
 
         // Navigacija na dnu
@@ -36,25 +41,12 @@ public class FavoritesActivity extends AppCompatActivity {
                 startActivity(new Intent(this, MainActivity.class));
                 return true;
             } else if (item.getItemId() == R.id.nav_actors) {
-                startActivity(new Intent(this, ActorsActivity.class));
-                return true;
-            } else if (item.getItemId() == R.id.nav_favorites) {
                 return true; // već smo ovdje
+            } else if (item.getItemId() == R.id.nav_favorites) {
+                startActivity(new Intent(this, FavoritesActivity.class));
+                return true;
             }
             return false;
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Osvježi listu favorita svaki put kad se vratiš
-        favoriteList.clear();
-        for (Movie movie : MainActivity.movieList) {
-            if (movie.favorit) {
-                favoriteList.add(movie); // dodaj sve označene filmove
-            }
-        }
-        adapter.notifyDataSetChanged();
     }
 }

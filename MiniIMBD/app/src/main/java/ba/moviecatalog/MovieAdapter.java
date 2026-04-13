@@ -5,52 +5,45 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
-// Adapter koji prikazuje filmove u RecyclerView listi
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
+// Adapter povezuje listu filmova sa RecyclerView-om
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> implements Filterable {
 
-    Context context;
-    List<Movie> movieList;
+    private Context context;
+    private List<Movie> movieList;
 
-    // Konstruktor
     public MovieAdapter(Context context, List<Movie> movieList) {
         this.context = context;
         this.movieList = movieList;
     }
 
-    // Kreira izgled svakog itema
     @Override
     public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(context).inflate(R.layout.movie_item, parent, false);
         return new MovieViewHolder(view);
     }
 
-    // Postavlja podatke za svaki film
     @Override
     public void onBindViewHolder(MovieViewHolder holder, int position) {
-
         Movie movie = movieList.get(position);
-
-        holder.naslov.setText(movie.naslov);
-        holder.zanr.setText(movie.zanr);
+        holder.title.setText(movie.naslov);
+        holder.genre.setText(movie.zanr);
         holder.poster.setImageResource(movie.poster);
-        holder.ratingBar.setRating(movie.rating);
 
-        // klik na film otvara detalje
+        // Klik otvara detalje i šalje indeks filma
         holder.itemView.setOnClickListener(v -> {
-
             Intent intent = new Intent(context, MovieDetailsActivity.class);
-            intent.putExtra("film", movie);
+            intent.putExtra("movie_index", position); // šaljemo indeks
             context.startActivity(intent);
-
         });
     }
 
@@ -59,21 +52,48 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         return movieList.size();
     }
 
-    // ViewHolder klasa
-    public static class MovieViewHolder extends RecyclerView.ViewHolder {
+    // Pretraga po naslovu
+    @Override
+    public Filter getFilter() {
+        return movieFilter;
+    }
 
+    private Filter movieFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            List<Movie> filteredList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0) {
+                filteredList.addAll(MainActivity.movieList);
+            } else {
+                String filterPattern = constraint.toString().toLowerCase().trim();
+                for (Movie movie : MainActivity.movieList) {
+                    if (movie.naslov.toLowerCase().contains(filterPattern)) {
+                        filteredList.add(movie);
+                    }
+                }
+            }
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            movieList.clear();
+            movieList.addAll((List<Movie>) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
+    class MovieViewHolder extends RecyclerView.ViewHolder {
+        TextView title, genre;
         ImageView poster;
-        TextView naslov;
-        TextView zanr;
-        RatingBar ratingBar;
 
-        public MovieViewHolder(View itemView) {
+        MovieViewHolder(View itemView) {
             super(itemView);
-
-            poster = itemView.findViewById(R.id.poster);
-            naslov = itemView.findViewById(R.id.naslov);
-            zanr = itemView.findViewById(R.id.zanr);
-            ratingBar = itemView.findViewById(R.id.ratingBar);
+            title = itemView.findViewById(R.id.movie_title);
+            genre = itemView.findViewById(R.id.movie_genre);
+            poster = itemView.findViewById(R.id.movie_poster);
         }
     }
 }

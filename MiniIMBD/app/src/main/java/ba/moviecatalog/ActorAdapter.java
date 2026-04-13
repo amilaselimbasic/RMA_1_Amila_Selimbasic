@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-// Adapter koji prikazuje listu glumaca
+// Adapter za prikaz glumaca u RecyclerView-u
 public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHolder> {
 
-    List<Actor> actorList;
+    private List<Actor> actorList;
 
     public ActorAdapter(List<Actor> actorList) {
         this.actorList = actorList;
@@ -21,18 +21,15 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
 
     @Override
     public ActorViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.actor_item, parent, false);
         return new ActorViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ActorViewHolder holder, int position) {
-
         Actor actor = actorList.get(position);
-
-        holder.ime.setText(actor.ime);
-        holder.slika.setImageResource(actor.slika);
+        holder.name.setText(actor.ime);
+        holder.photo.setImageResource(actor.slika);
     }
 
     @Override
@@ -40,16 +37,14 @@ public class ActorAdapter extends RecyclerView.Adapter<ActorAdapter.ActorViewHol
         return actorList.size();
     }
 
-    public static class ActorViewHolder extends RecyclerView.ViewHolder {
+    class ActorViewHolder extends RecyclerView.ViewHolder {
+        TextView name;
+        ImageView photo;
 
-        ImageView slika;
-        TextView ime;
-
-        public ActorViewHolder(View itemView) {
+        ActorViewHolder(View itemView) {
             super(itemView);
-
-            slika = itemView.findViewById(R.id.actor_slika);
-            ime = itemView.findViewById(R.id.actor_ime);
+            name = itemView.findViewById(R.id.actor_ime);
+            photo = itemView.findViewById(R.id.actor_slika);
         }
     }
 }
